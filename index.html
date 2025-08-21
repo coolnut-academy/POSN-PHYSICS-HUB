@@ -26,6 +26,21 @@
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+        
+        .logo-img {
+            border-radius: 1.5rem; /* Changed from 50% to create a rounded rectangle */
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.6), 0 0 16px rgba(56, 189, 248, 0.5), 0 0 24px rgba(56, 189, 248, 0.4);
+            animation: neon-glow 2.5s infinite alternate;
+        }
+
+        @keyframes neon-glow {
+            from {
+                box-shadow: 0 0 8px rgba(56, 189, 248, 0.6), 0 0 16px rgba(56, 189, 248, 0.5), 0 0 24px rgba(56, 189, 248, 0.4);
+            }
+            to {
+                box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), 0 0 24px rgba(56, 189, 248, 0.7), 0 0 36px rgba(56, 189, 248, 0.6);
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -35,7 +50,8 @@
 
         <!-- Home Page -->
         <main id="home-page" class="page active">
-            <header class="text-center my-8 md:my-12">
+            <header class="text-center my-8 md:my-12 flex flex-col items-center">
+                <img src="https://img5.pic.in.th/file/secure-sv1/-4ff5f5380cd7659cc.png" alt="POSN Physics Hub Logo" class="logo-img w-32 md:w-40 mb-6">
                 <h1 class="font-orbitron text-4xl md:text-6xl font-bold text-sky-300 tracking-widest">POSN PHYSICS HUB</h1>
                 <p class="text-lg md:text-xl text-gray-400 mt-2">คลังความรู้ฉบับสมบูรณ์สู่ค่าย 1 สอวน. ฟิสิกส์</p>
             </header>
@@ -235,7 +251,7 @@
         },
         'thermo': {
             title: '🔥 อุณหพลศาสตร์',
-            icon: '🔥',
+            icon: '�',
             subcategories: {
                 'kinetic_theory': {
                     title: 'ทฤษฎีจลน์ของแก๊ส',
