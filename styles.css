@@ -1,0 +1,145 @@
+/* Custom Styling for POSN Physics Hub */
+
+body {
+    /* Original background without heavy gradient so the landing page poster is fully visible */
+    background: url('bg.png') center/cover no-repeat fixed;
+    background-color: #0b1121;
+}
+
+/* Glassmorphism utility classes */
+.glass {
+    background: rgba(5, 10, 20, 0.9); /* Darker nav/footer */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+    background: rgba(30, 41, 59, 0.6); /* Slightly lighter than container to stand out */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, border-color 0.2s, box-shadow 0.2s;
+}
+
+.glass-container {
+    background: rgba(5, 11, 20, 0.88); /* Extremely dark base for main content */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6, 182, 212, 0.4); /* Cyan border on hover */
+    box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15);
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+}
+
+.btn-primary-alt {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary-alt:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #06b6d4;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #06b6d4;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background: rgba(6, 182, 212, 0.1);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+/* MathJax Specific */
+.mathjax-formula {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5rem 0;
+    margin: 0.5rem 0;
+}
+.mjx-chtml {
+    color: #e2e8f0 !important;
+}
+
+/* Range Inputs (Sliders) */
+input[type=range] {
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    height: 8px;
+    outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #06b6d4;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a; 
+}
+::-webkit-scrollbar-thumb {
+    background: #334155; 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569; 
+}

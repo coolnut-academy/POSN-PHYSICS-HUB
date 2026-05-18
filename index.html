@@ -3,408 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POSN Physics Hub - Ultimate Edition</title>
+    <title>POSN Physics Camp 1 Trainer</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- KaTeX for beautiful math rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0KOVEMMhpZBvr3NuFXcSUIKGPJka1WaVdUoIoZs49OylECoMVIU5g" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0b1121',
+                        space: '#0f172a',
+                        cyan: '#06b6d4',
+                        violet: '#8b5cf6',
+                        glassBg: 'rgba(30, 41, 59, 0.7)'
+                    },
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Sarabun', sans-serif; background-color: #0a0a1a; color: #e0e0e0; background-image: radial-gradient(circle at 15% 50%, rgba(100, 116, 225, 0.1), transparent 30%), radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 30%); overflow-x: hidden; }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .page { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; position: absolute; width: 100%; top: 0; left: 0; padding: 1rem; }
-        .page.active { display: block; opacity: 1; position: relative; }
-        .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 1rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
-        .nav-btn, .category-btn, .subcategory-btn { background: rgba(31, 41, 55, 0.5); border: 1px solid rgba(56, 189, 248, 0.3); transition: all 0.3s ease; }
-        .nav-btn:hover, .category-btn:hover, .subcategory-btn:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 0 25px rgba(56, 189, 248, 0.5); border-color: rgba(56, 189, 248, 0.8); }
-        .content-card { background: rgba(31, 41, 55, 0.4); border-left: 4px solid #38bdf8; }
-        .equation { background-color: rgba(10, 10, 26, 0.5); padding: 1rem; border-radius: 0.5rem; color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 1.1rem; overflow-x: auto; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111827; }
-        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
-        
-        .logo-img {
-            border-radius: 1.5rem; /* Changed from 50% to create a rounded rectangle */
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.6), 0 0 16px rgba(56, 189, 248, 0.5), 0 0 24px rgba(56, 189, 248, 0.4);
-            animation: neon-glow 2.5s infinite alternate;
-        }
-
-        @keyframes neon-glow {
-            from {
-                box-shadow: 0 0 8px rgba(56, 189, 248, 0.6), 0 0 16px rgba(56, 189, 248, 0.5), 0 0 24px rgba(56, 189, 248, 0.4);
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
             }
-            to {
-                box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), 0 0 24px rgba(56, 189, 248, 0.7), 0 0 36px rgba(56, 189, 248, 0.6);
-            }
-        }
-    </style>
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
-<body class="min-h-screen">
-    <div class="max-w-7xl mx-auto relative">
-        <!-- Navigation Buttons -->
-        <div id="nav-container" class="fixed top-4 left-4 z-50 space-x-2"></div>
-
-        <!-- Home Page -->
-        <main id="home-page" class="page active">
-            <header class="text-center my-8 md:my-12 flex flex-col items-center">
-                <img src="https://img5.pic.in.th/file/secure-sv1/-4ff5f5380cd7659cc.png" alt="POSN Physics Hub Logo" class="logo-img w-32 md:w-40 mb-6">
-                <h1 class="font-orbitron text-4xl md:text-6xl font-bold text-sky-300 tracking-widest">POSN PHYSICS HUB</h1>
-                <p class="text-lg md:text-xl text-gray-400 mt-2">คลังความรู้ฉบับสมบูรณ์สู่ค่าย 1 สอวน. ฟิสิกส์</p>
-            </header>
-            <div id="main-categories" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-                <!-- Main categories will be generated by JS -->
-            </div>
-        </main>
-
-        <!-- Sub-category Pages -->
-        <section id="sub-category-page" class="page glass-panel">
-            <h2 id="sub-category-title" class="font-orbitron text-3xl md:text-4xl font-bold text-sky-300 border-b-2 border-sky-500/30 pb-3 mb-6"></h2>
-            <div id="sub-category-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Sub-category buttons will be generated by JS -->
-            </div>
-        </section>
-
-        <!-- Content Pages -->
-        <section id="content-page" class="page glass-panel">
-            <h2 id="content-title" class="font-orbitron text-3xl md:text-4xl font-bold text-sky-300 border-b-2 border-sky-500/30 pb-3 mb-6"></h2>
-            <div id="content-body" class="space-y-8">
-                <!-- Content will be generated by JS -->
-            </div>
-        </section>
+<body class="bg-navy text-gray-100 min-h-screen flex flex-col font-sans">
+    
+    <!-- LANDING PAGE -->
+    <div id="landing-page" class="flex-grow flex flex-col items-center justify-end pb-24 md:pb-32 z-50 fade-in">
+        <button onclick="enterApp()" class="btn-primary text-2xl md:text-3xl py-4 px-12 md:px-16 shadow-[0_0_40px_rgba(6,182,212,0.9)] hover:scale-110 hover:shadow-[0_0_60px_rgba(6,182,212,1)] transition-all duration-300 font-bold border-2 border-cyan/50">
+            เข้าสู่บทเรียน
+        </button>
     </div>
 
-    <script>
-    const db = {
-        'mechanics': {
-            title: '🔩 กลศาสตร์',
-            icon: '🔩',
-            subcategories: {
-                'kinematics': {
-                    title: 'การเคลื่อนที่',
-                    content: 
-                        '<div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ศึกษาการเคลื่อนที่ของวัตถุโดยไม่สนใจแรงที่เกี่ยวข้อง ครอบคลุมการเคลื่อนที่แนวตรงด้วยความเร่งคงที่ และการเคลื่อนที่แบบโปรเจกไทล์ ซึ่งเป็นการเคลื่อนที่ 2 มิติภายใต้ความเร่งโน้มถ่วง โดยมีหลักการสำคัญคือการแยกคิดแกน x (ความเร็วคงที่) และแกน y (ความเร่งคงที่) อย่างเป็นอิสระต่อกัน</p></div>' +
-                        '<div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">`\\text{แนวตรง: } v = u+at, s = ut+\\frac{1}{2}at^2, v^2=u^2+2as \\\\ \\text{โปรเจกไทล์ (แกน x): } S_x = u_x t \\\\ \\text{โปรเจกไทล์ (แกน y): } S_y = u_y t - \\frac{1}{2}gt^2`</div></div>' +
-                        '<div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67)</h3><p class="mb-2">โปรเจกไทล์พุ่งออกจากจุดกำเนิดด้วยความเร็ว `u` ทำมุม 30° เหนือแกน x และกระทบพื้นเอียงที่ทำมุม 30° ใต้แกน x ที่จุด P จงหาระยะ OP</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. ตั้งสมการการเคลื่อนที่: `x(t) = (u\\cos30^{\\circ})t`, `y(t) = (u\\sin30^{\\circ})t - \\frac{1}{2}gt^2`</p><p>2. สมการเส้นพื้นเอียงคือ `y = -x\\tan30^{\\circ}`</p><p>3. แทน `x(t)` และ `y(t)` ลงในสมการพื้นเอียงเพื่อหาเวลา `t` ที่กระทบ</p><p>4. `(u\\sin30^{\\circ})t - \\frac{1}{2}gt^2 = -(u\\cos30^{\\circ})t \\cdot \\tan30^{\\circ} \\Rightarrow ut - \\frac{1}{2}gt^2 = 0` (เนื่องจาก `\\sin30^{\\circ} + \\cos30^{\\circ}\\tan30^{\\circ} = 1`)</p><p>5. แก้สมการได้ `t = \\frac{2u}{g}`</p><p>6. หาระยะ `x` และ `y` ณ เวลานั้น แล้วใช้พีทาโกรัสหา `OP = \\sqrt{x^2+y^2} = \\frac{2u^2}{g}`</p></div></div>' +
-                        '<div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>แยกคิดแกน x และ y เสมอ โดยมีเวลา `t` เป็นตัวเชื่อม</li><li>กำหนดทิศทางบวก/ลบให้ชัดเจนตั้งแต่ต้น</li></ul></div>'
-                },
-                'newton_friction': {
-                    title: 'กฎของนิวตันและแรงเสียดทาน',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>กฎการเคลื่อนที่ของนิวตันเป็นหัวใจของกลศาสตร์คลาสสิก โดยกฎข้อที่สอง \`\\sum \\vec{F} = m\\vec{a}\` เป็นสมการหลักในการวิเคราะห์ปัญหาส่วนใหญ่ แรงเสียดทานเป็นแรงต้านการเคลื่อนที่ แบ่งเป็นแรงเสียดทานสถิต (\`f_s\`) ซึ่งมีค่าไม่คงที่ และแรงเสียดทานจลน์ (\`f_k\`) ซึ่งมีค่าคงที่</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\sum \\vec{F} = m\\vec{a} \\\\ f_s \\le \\mu_s N \\\\ f_k = \\mu_k N\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 64)</h3><p class="mb-2">แผ่น B วางบนแผ่น A ซึ่งวางบนพื้นระดับ สัมประสิทธิ์ความเสียดทานระหว่าง A กับ B คือ \`\\mu\` ถ้าดึงแผ่น A ด้วยความเร่ง \`a\` เงื่อนไขใดที่ทำให้แผ่น B ไถลไปบน A</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. พิจารณาแผ่น B แรงเดียวที่ทำให้ B เคลื่อนที่ตาม A ในแนวราบคือแรงเสียดทานสถิต \`f_s\`</p><p>2. จากกฎข้อที่สองของนิวตันสำหรับ B: \`f_s = m_B a_B\`</p><p>3. แรงเสียดทานสถิตสูงสุดที่เกิดขึ้นได้คือ \`f_{s,max} = \\mu_s N = \\mu_s m_B g\`</p><p>4. ดังนั้น ความเร่งสูงสุดที่ B จะเคลื่อนที่ตาม A ไปได้โดยไม่ไถลคือ \`a_{B,max} = \\mu_s g\`</p><p>5. ถ้าความเร่งของ A (\`a\`) มากกว่าความเร่งสูงสุดนี้ (\`a > \\mu_s g\`) แผ่น B จะไถล</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>วาด Free-Body Diagram (FBD) ทุกครั้ง</li><li>แรงเสียดทานสถิตไม่ได้มีค่าเท่ากับ \`\\mu_s N\` เสมอไป มันจะปรับค่าตามแรงที่พยายามทำให้วัตถุเคลื่อนที่</li></ul></div>
-                    `
-                },
-                'equilibrium': {
-                    title: 'สมดุลกล',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>วัตถุจะอยู่ในสภาวะสมดุลสถิตเมื่อมันหยุดนิ่งและไม่หมุน ซึ่งหมายความว่าแรงลัพธ์และทอร์กลัพธ์ที่กระทำต่อวัตถุต้องเป็นศูนย์ทั้งคู่ โจทย์ส่วนใหญ่มักเป็นการวิเคราะห์แรงบนคาน, บันไดพิงกำแพง หรือวัตถุที่ถูกแขวน</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="grid md:grid-cols-2 gap-4"><div><p class="font-semibold mb-1">สมดุลต่อการเลื่อนตำแหน่ง</p><div class="equation">\`\\sum F_x = 0 \\\\ \\sum F_y = 0\`</div></div><div><p class="font-semibold mb-1">สมดุลต่อการหมุน</p><div class="equation">\`\\sum \\tau = 0\`</div></div></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">แผ่นสี่เหลี่ยมมวล M ยาว L กว้าง b แขวนด้วยเชือกที่จุดกึ่งกลางขอบบน (A) และมีมวล m ห้อยที่มุมล่าง (B) ทำให้แผ่นเอียงทำมุม \`\\theta\` กับแนวระดับ จงหา \`\\tan\\theta\`</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. เลือกจุดแขวน A เป็นจุดหมุน</p><p>2. ทอร์กจากน้ำหนักแผ่น M (ทวนเข็ม): \`\\tau_M = (Mg)(\\frac{L}{2}\\cos\\theta)\`</p><p>3. ทอร์กจากมวล m (ตามเข็ม): \`\\tau_m = (mg)(\\frac{L}{2}\\cos\\theta + b\\sin\\theta)\`</p><p>4. สมดุลของทอร์ก \`\\tau_M = \\tau_m\`: \`Mg(\\frac{L}{2}\\cos\\theta) = mg(\\frac{L}{2}\\cos\\theta + b\\sin\\theta)\`</p><p>5. จัดรูปสมการ: \`(M-m)g\\frac{L}{2}\\cos\\theta = mgb\\sin\\theta\`</p><p>6. \`\\tan\\theta = \\frac{\\sin\\theta}{\\cos\\theta} = \\frac{(M-m)L}{2mb}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>เลือกจุดหมุนให้ฉลาด เพื่อกำจัดแรงที่ไม่ทราบค่า</li><li>แขนของโมเมนต์ต้องตั้งฉากกับแนวแรงเสมอ</li></ul></div>
-                    `
-                },
-                 'work_energy': {
-                    title: 'งานและพลังงาน',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>เป็นอีกวิธีในการวิเคราะห์การเคลื่อนที่โดยพิจารณาปริมาณสเกลาร์ (พลังงาน) แทนปริมาณเวกเตอร์ (แรง) ซึ่งมักจะง่ายกว่าในหลายกรณี หลักการสำคัญคือ กฎการอนุรักษ์พลังงานกล ซึ่งใช้ได้เมื่อไม่มีแรงไม่อนุรักษ์ (เช่น แรงเสียดทาน) มากระทำ และทฤษฎีบทงาน-พลังงานจลน์ ที่เชื่อมโยงงานทั้งหมดที่ทำกับวัตถุกับการเปลี่ยนแปลงพลังงานจลน์</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`W = \\vec{F} \\cdot \\vec{s} = Fs\\cos\\theta \\\\ E_k = \\frac{1}{2}mv^2 \\\\ E_p = mgh \\\\ E_{p,s} = \\frac{1}{2}kx^2 \\\\ W_{\\text{net}} = \\Delta E_k \\\\ E_1 + W_{\\text{non-conservative}} = E_2\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 64)</h3><p class="mb-2">ปล่อยมวล m จากหยุดนิ่งที่ระยะ \`x\` จากศูนย์กลางโลก (มวล M, รัศมี R) ให้ตกสู่โลก จะชนบรรยากาศโลกด้วยความเร็วเท่าใด</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. ใช้กฎอนุรักษ์พลังงานกล: \`E_{\\text{initial}} = E_{\\text{final}}\`</p><p>2. พลังงานเริ่มต้น (ที่ระยะ \`x\`): \`E_k + E_p = 0 + (-\\frac{GMm}{x})\`</p><p>3. พลังงานสุดท้าย (ที่ผิวโลก, ระยะ \`R\`): \`E_k' + E_p' = \\frac{1}{2}mv^2 + (-\\frac{GMm}{R})\`</p><p>4. \`-\\frac{GMm}{x} = \\frac{1}{2}mv^2 - \\frac{GMm}{R}\`</p><p>5. จัดรูปหา \`v^2\`: \`\\frac{1}{2}v^2 = GM(\\frac{1}{R} - \\frac{1}{x})\`</p><p>6. \`v^2 = 2GM(\\frac{x-R}{Rx})\`</p><p>7. เนื่องจาก \`g = \\frac{GM}{R^2}\`, เราสามารถแทน \`GM = gR^2\` ได้: \`v^2 = 2gR^2(\\frac{x-R}{Rx}) = 2gR(1 - \\frac{R}{x})\`</p><p>8. \`v = \\sqrt{2gR(1 - \\frac{R}{x})}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>พลังงานเป็นปริมาณสเกลาร์ ไม่ต้องกังวลเรื่องทิศทาง</li><li>อย่าลืมพลังงานศักย์โน้มถ่วงในรูปทั่วไป \`U_g = -GMm/r\` สำหรับโจทย์ระดับดาวเคราะห์</li><li>หากมีแรงเสียดทาน ให้ใช้สมการ \`E_1 = E_2 + W_f\`</li></ul></div>
-                    `
-                },
-                'momentum': {
-                    title: 'โมเมนตัมและการชน',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>โมเมนตัม (\`\\vec{p}=m\\vec{v}\`) เป็นปริมาณที่บอกสภาพการเคลื่อนที่ของวัตถุ หลักการสำคัญคือ **กฎการอนุรักษ์โมเมนตัม** ซึ่งกล่าวว่าโมเมนตัมรวมของระบบปิด (ไม่มีแรงภายนอกกระทำ) จะมีค่าคงที่เสมอ หลักการนี้มีประโยชน์อย่างยิ่งในการวิเคราะห์เหตุการณ์ที่มีช่วงเวลาสั้นๆ เช่น การชน หรือการระเบิด</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\vec{p} = m\\vec{v} \\\\ \\sum \\vec{p}_{\\text{before}} = \\sum \\vec{p}_{\\text{after}} \\\\ \\text{การดล: } \\vec{I} = \\Delta \\vec{p} = \\vec{F}_{\\text{avg}} \\Delta t\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">มวล M เคลื่อนที่ด้วยความเร็ว \`u\` เข้าชนมวล m ที่อยู่นิ่งทีละลูกแบบชนแล้วติดกันไป ทันทีหลังชนลูกที่ N จะมีความเร็วเป็นเท่าใด</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. พิจารณาระบบคือมวล M และมวล m ทั้งหมด N ลูก</p><p>2. โมเมนตัมรวมก่อนชน: \`P_{\\text{before}} = M u + (Nm)(0) = Mu\`</p><p>3. โมเมนตัมรวมหลังชน (ทุกก้อนติดกันไป): \`P_{\\text{after}} = (M + Nm) v_f\`</p><p>4. จากกฎอนุรักษ์โมเมนตัม \`P_{\\text{before}} = P_{\\text{after}}\`</p><p>5. \`Mu = (M + Nm) v_f\`</p><p>6. \`v_f = \\frac{M}{M+Nm} u\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>โมเมนตัมเป็นปริมาณเวกเตอร์ ต้องคิดทิศทางเสมอ</li><li>ในการชนแบบยืดหยุ่น พลังงานจลน์จะอนุรักษ์ด้วย แต่ในการชนแบบไม่ยืดหยุ่น พลังงานจลน์จะสูญเสียไป</li><li>การระเบิดคือกรณีกลับกันของการชนแบบไม่ยืดหยุ่นสมบูรณ์</li></ul></div>
-                    `
-                },
-                'rotation': {
-                    title: 'การเคลื่อนที่แบบหมุน',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>เป็นการศึกษาการเคลื่อนที่ของวัตถุแข็งเกร็ง (Rigid Body) ที่มีการหมุนรอบแกนตรึงอยู่กับที่ มีปริมาณต่างๆ ที่คล้ายคลึงกับการเคลื่อนที่เชิงเส้น เช่น ตำแหน่งเชิงมุม (\`\\theta\`), ความเร็วเชิงมุม (\`\\omega\`), ความเร่งเชิงมุม (\`\\alpha\`), ทอร์ก (\`\\tau\`) และโมเมนต์ความเฉื่อย (\`I\`) ซึ่งเปรียบเสมือนมวลในเชิงหมุน</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\sum \\tau = I \\alpha \\\\ \\text{การกลิ้งไม่ไถล: } v_{cm} = R\\omega, a_{cm} = R\\alpha \\\\ \\text{พลังงานจลน์รวม: } K = \\frac{1}{2}mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67)</h3><p class="mb-2">ล้อรัศมี R มวล M โมเมนต์ความเฉื่อย \`I\` กำลังกลิ้งโดยไม่ไถลลงพื้นเอียงทำมุม \`\\theta\` จงหาขนาดของแรงเสียดทานที่พื้นเอียงกระทำต่อล้อ</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. สมการการเคลื่อนที่เชิงเส้น (ตามแนวพื้นเอียง): \`Mg\\sin\\theta - f_s = Ma_{cm}\`</p><p>2. สมการการเคลื่อนที่เชิงหมุน (รอบจุดศูนย์กลางมวล): \`\\tau = f_s R = I\\alpha\`</p><p>3. เงื่อนไขการกลิ้งไม่ไถล: \`a_{cm} = R\\alpha \\Rightarrow \\alpha = a_{cm}/R\`</p><p>4. แทน \`\\alpha\` ในสมการที่ 2: \`f_s R = I(a_{cm}/R) \\Rightarrow f_s = \\frac{I a_{cm}}{R^2}\`</p><p>5. แทน \`f_s\` กลับไปในสมการที่ 1: \`Mg\\sin\\theta - \\frac{I a_{cm}}{R^2} = Ma_{cm}\`</p><p>6. แก้หา \`a_{cm}\`: \`a_{cm} = \\frac{Mg\\sin\\theta}{M + I/R^2}\`</p><p>7. แทน \`a_{cm}\` กลับไปในสมการของ \`f_s\`: \`f_s = \\frac{I}{R^2} \\left( \\frac{Mg\\sin\\theta}{M + I/R^2} \\right) = \\frac{Mg\\sin\\theta}{1 + MR^2/I}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>แรงเสียดทานในการกลิ้งไม่ไถลคือ **แรงเสียดทานสถิต** และมันไม่ทำให้เกิดการสูญเสียพลังงาน</li><li>พลังงานจลน์ของการกลิ้งประกอบด้วย 2 ส่วน คือ พลังงานจลน์ของจุดศูนย์กลางมวล และพลังงานจลน์ของการหมุนรอบจุดศูนย์กลางมวล</li></ul></div>
-                    `
-                },
-                 'shm_pendulum': {
-                    title: 'SHM และลูกตุ้ม',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>การเคลื่อนที่แบบซิมเปิลฮาร์มอนิก (Simple Harmonic Motion - SHM) คือการเคลื่อนที่กลับไปกลับมาซ้ำรอยเดิม โดยมีแรงดึงกลับแปรผันตรงกับการกระจัดและมีทิศตรงข้ามเสมอ (\`F = -kx\`) ตัวอย่างที่พบบ่อยคือระบบมวลติดสปริง และการแกว่งของลูกตุ้มอย่างง่ายที่มุมเล็กๆ</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\text{สปริง: } \\omega = \\sqrt{\\frac{k}{m}}, T = 2\\pi\\sqrt{\\frac{m}{k}} \\\\ \\text{ลูกตุ้มอย่างง่าย: } \\omega = \\sqrt{\\frac{g}{L}}, T = 2\\pi\\sqrt{\\frac{L}{g}}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">ลูกตุ้มกรวย (Conical Pendulum) มวล m เชือกยาว \`L\` แกว่งเป็นวงกลมในแนวระดับ โดยเชือกทำมุม \`\\theta\` คงที่กับแนวดิ่ง คาบการเคลื่อนที่มีค่าเป็นกี่เท่าของคาบการแกว่งแบบลูกตุ้มอย่างง่าย</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. วิเคราะห์แรงของลูกตุ้มกรวย: \`T\\cos\\theta = mg\` และ \`T\\sin\\theta = ma_c = m\\omega^2 r\`</p><p>2. รัศมีการหมุน \`r = L\\sin\\theta\`</p><p>3. นำสมการหารกัน: \`\\frac{T\\sin\\theta}{T\\cos\\theta} = \\tan\\theta = \\frac{m\\omega^2 (L\\sin\\theta)}{mg}\`</p><p>4. แก้หา \`\\omega^2\`: \`\\frac{\\sin\\theta}{\\cos\\theta} = \\frac{\\omega^2 L\\sin\\theta}{g} \\Rightarrow \\omega^2 = \\frac{g}{L\\cos\\theta}\`</p><p>5. หาคาบของลูกตุ้มกรวย: \`T_{\\text{cone}} = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{L\\cos\\theta}{g}}\`</p><p>6. คาบของลูกตุ้มอย่างง่าย: \`T_{\\text{simple}} = 2\\pi\\sqrt{\\frac{L}{g}}\`</p><p>7. อัตราส่วน: \`\\frac{T_{\\text{cone}}}{T_{\\text{simple}}} = \\sqrt{\\cos\\theta}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>สูตรคาบของลูกตุ้มอย่างง่ายใช้ได้เมื่อมุมแกว่ง \`\\theta\` มีค่าน้อยมากๆ เท่านั้น</li><li>พลังงานรวมในระบบ SHM มีค่าคงที่</li></ul></div>
-                    `
-                },
-                'fluids': {
-                    title: 'กลศาสตร์ของไหล',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ศึกษาพฤติกรรมของของไหล (ของเหลวและแก๊ส) ทั้งในสภาวะหยุดนิ่ง (สถิตยศาสตร์ของไหล) และกำลังเคลื่อนที่ (พลศาสตร์ของไหล) หัวข้อสำคัญได้แก่ ความดันในของเหลว, แรงลอยตัว (กฎของอาร์คิมิดีส), และสมการของแบร์นูลลีที่อธิบายความสัมพันธ์ระหว่างความเร็ว ความดัน และความสูงของของไหล</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`P = P_0 + \\rho gh \\\\ \\text{แรงลอยตัว: } F_B = \\rho_{\\text{fluid}} V_{\\text{submerged}} g \\\\ \\text{แบร์นูลลี: } P + \\frac{1}{2}\\rho v^2 + \\rho gh = \\text{constant}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">ลูกปิงปองมวล m ปริมาตร V ถูกผูกเชือกไว้กับก้นถังน้ำที่มีความหนาแน่น \`\\rho\` ถ้าเชือกขาดทันที ลูกปิงปองจะเคลื่อนที่ขึ้นด้วยความเร่งเท่าใด</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. วาด FBD ของลูกปิงปองขณะที่เชือกขาด มี 2 แรง: แรงลอยตัว \`F_B\` (ทิศขึ้น) และน้ำหนัก \`mg\` (ทิศลง)</p><p>2. ขนาดของแรงลอยตัว: \`F_B = \\rho V g\` (เนื่องจากจมทั้งลูก)</p><p>3. ใช้กฎข้อที่สองของนิวตัน: \`\\sum F_y = F_B - mg = ma\`</p><p>4. \`\\rho V g - mg = ma\`</p><p>5. แก้หาความเร่ง \`a\`: \`a = \\frac{(\\rho V - m)g}{m} = (\\frac{\\rho V}{m} - 1)g\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>\`V\` ในสูตรแรงลอยตัวคือปริมาตรส่วนที่จม ไม่ใช่ปริมาตรทั้งหมด</li><li>สมการแบร์นูลลีใช้ได้กับของไหลในอุดมคติ (ไม่มีความหนืด, ไหลอย่างสม่ำเสมอ)</li></ul></div>
-                    `
-                },
-                'gravitation': {
-                    title: 'ความโน้มถ่วง',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>กฎความโน้มถ่วงสากลของนิวตันอธิบายแรงดึงดูดระหว่างมวลสองก้อนใดๆ ในเอกภพ ซึ่งเป็นพื้นฐานในการทำความเข้าใจการโคจรของดาวเคราะห์และดาวเทียม พลังงานศักย์โน้มถ่วงในกรณีนี้จะมีค่าเป็นลบและขึ้นอยู่กับระยะห่างระหว่างมวล</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`F_g = \\frac{GMm}{r^2} \\\\ U_g = -\\frac{GMm}{r} \\\\ \\text{การโคจรเป็นวงกลม: } \\frac{GMm}{r^2} = \\frac{mv^2}{r}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">ระบบดาวคู่มวล M และ m โคจรรอบจุดศูนย์กลางมวลร่วม โดยมีระยะห่างระหว่างกันคงที่เท่ากับ R จงหาพลังงานจลน์รวมของระบบ</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. หาระยะจากจุดศูนย์กลางมวลถึงแต่ละดาว: \`r_M = \\frac{m}{M+m}R\`, \`r_m = \\frac{M}{M+m}R\`</p><p>2. แรงดึงดูดระหว่างมวลคือ \`F_g = \\frac{GMm}{R^2}\` ซึ่งทำหน้าที่เป็นแรงสู่ศูนย์กลางของแต่ละดาว</p><p>3. สำหรับมวล M: \`\\frac{GMm}{R^2} = M\\omega^2 r_M = M\\omega^2 (\\frac{m}{M+m}R)\`</p><p>4. แก้หา \`\\omega^2\`: \`\\omega^2 = \\frac{G(M+m)}{R^3}\`</p><p>5. พลังงานจลน์รวม \`K = K_M + K_m = \\frac{1}{2}Mv_M^2 + \\frac{1}{2}mv_m^2 = \\frac{1}{2}M(\\omega r_M)^2 + \\frac{1}{2}m(\\omega r_m)^2\`</p><p>6. \`K = \\frac{1}{2}\\omega^2 [M(\\frac{mR}{M+m})^2 + m(\\frac{MR}{M+m})^2] = \\frac{1}{2}\\omega^2 \\frac{MmR^2}{M+m}\`</p><p>7. แทนค่า \`\\omega^2\`: \`K = \\frac{1}{2} \\frac{G(M+m)}{R^3} \\frac{MmR^2}{M+m} = \\frac{GMm}{2R}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>พลังงานศักย์โน้มถ่วงเป็นลบ และเข้าใกล้ศูนย์เมื่อระยะห่างเป็นอนันต์</li><li>ในการโคจร พลังงานกลรวม (\`E = K+U\`) จะมีค่าคงที่และเป็นลบ</li></ul></div>
-                    `
-                }
-            }
-        },
-        'em': {
-            title: '⚡ ไฟฟ้าและแม่เหล็ก',
-            icon: '⚡',
-            subcategories: {
-                'electrostatics': {
-                    title: 'ไฟฟ้าสถิต',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ศึกษาเกี่ยวกับประจุไฟฟ้าที่หยุดนิ่ง รวมถึงแรงระหว่างประจุ (กฎของคูลอมบ์), สนามไฟฟ้า (\`\\vec{E}\`) ที่ประจุสร้างขึ้น, และศักย์ไฟฟ้า (\`V\`) ซึ่งเป็นพลังงานศักย์ต่อหน่วยประจุ การคำนวณสนามและศักย์ไฟฟ้าจากระบบของจุดประจุเป็นหัวข้อที่สำคัญ</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`F_e = \\frac{kQ_1Q_2}{r^2} \\\\ \\vec{E} = \\frac{\\vec{F}}{q} = \\frac{kQ}{r^2}\\hat{r} \\\\ V = \\frac{U}{q} = \\frac{kQ}{r}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67)</h3><p class="mb-2">จุดประจุ \`+q\` สองประจุอยู่ที่ตำแหน่ง \`(0, a)\` และ \`(0, -a)\` จงหาสนามไฟฟ้าที่มีขนาดโตที่สุดบนแกน x</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. สนามไฟฟ้าที่จุด \`(x, 0)\` จากประจุบนและล่างมีขนาดเท่ากันคือ \`E_1 = E_2 = \\frac{kq}{r^2} = \\frac{kq}{x^2+a^2}\`</p><p>2. สนามลัพธ์ในแนวแกน y หักล้างกันหมด เหลือแต่แนวแกน x: \`E_x = E_1\\cos\\theta + E_2\\cos\\theta = 2E_1\\cos\\theta\`</p><p>3. จากรูป \`\\cos\\theta = \\frac{x}{r} = \\frac{x}{\\sqrt{x^2+a^2}}\`</p><p>4. \`E_x(x) = 2(\\frac{kq}{x^2+a^2}) (\\frac{x}{\\sqrt{x^2+a^2}}) = \\frac{2kqx}{(x^2+a^2)^{3/2}}\`</p><p>5. หาค่าสูงสุดโดยการ differentiate \`E_x(x)\` เทียบกับ \`x\` แล้วให้เท่ากับศูนย์ จะได้ \`x = \\pm \\frac{a}{\\sqrt{2}}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>สนามไฟฟ้าเป็นเวกเตอร์ ต้องรวมแบบเวกเตอร์ (แตกแรง)</li><li>ศักย์ไฟฟ้าเป็นสเกลาร์ สามารถรวมกันแบบพีชคณิตได้เลย (ระวังเครื่องหมายบวกลบของประจุ)</li></ul></div>
-                    `
-                },
-                'capacitors_dc': {
-                    title: 'ตัวเก็บประจุและวงจร DC',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ตัวเก็บประจุ (Capacitor) เป็นอุปกรณ์ที่ใช้เก็บประจุและพลังงานไฟฟ้าในรูปของสนามไฟฟ้า ความสามารถในการเก็บประจุเรียกว่าค่าความจุ (\`C\`) ในวงจรไฟฟ้ากระแสตรง (DC) เมื่อเวลาผ่านไปนานๆ ตัวเก็บประจุจะทำหน้าที่เหมือนวงจรเปิด คือไม่มีกระแสไหลผ่าน</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`C = \\frac{Q}{V} \\\\ \\text{แผ่นขนาน: } C = \\frac{\\epsilon_0 A}{d} \\\\ U_C = \\frac{1}{2}QV = \\frac{1}{2}CV^2 = \\frac{Q^2}{2C}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 64)</h3><p class="mb-2">ในวงจร Wheatstone bridge ที่มีตัวต้านทาน \`R, 2R, 3R, 4R\` และมีตัวเก็บประจุ \`C\` ต่ออยู่ตรงกลาง จงหาขนาดของประจุใน C เมื่อต่อกับแหล่งจ่ายไฟ \`\\mathcal{E}\`</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. เมื่อเวลาผ่านไปนานๆ จะไม่มีกระแสไหลผ่าน C</p><p>2. วงจรจะแบ่งเป็น 2 แขนขนานกัน คือแขนบน (\`R\` ต่ออนุกรมกับ \`2R\`) และแขนล่าง (\`3R\` ต่ออนุกรมกับ \`4R\`)</p><p>3. หาศักย์ไฟฟ้าที่จุดต่อระหว่าง \`R\` และ \`2R\` (จุด A): \`V_A = \\mathcal{E} \\frac{2R}{R+2R} = \\frac{2}{3}\\mathcal{E}\`</p><p>4. หาศักย์ไฟฟ้าที่จุดต่อระหว่าง \`3R\` และ \`4R\` (จุด B): \`V_B = \\mathcal{E} \\frac{4R}{3R+4R} = \\frac{4}{7}\\mathcal{E}\`</p><p>5. ความต่างศักย์คร่อม C คือ \`\\Delta V_C = V_A - V_B = (\\frac{2}{3} - \\frac{4}{7})\\mathcal{E} = \\frac{14-12}{21}\\mathcal{E} = \\frac{2}{21}\\mathcal{E}\`</p><p>6. ประจุใน C คือ \`Q = C \\Delta V_C = \\frac{2}{21}C\\mathcal{E}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>การต่อตัวเก็บประจุอนุกรมและขนานจะสลับกับตัวต้านทาน (\`C_{\\text{series}}^{-1} = \\sum C_i^{-1}\`, \`C_{\\text{parallel}} = \\sum C_i\`)</li><li>เมื่อเวลาผ่านไปนานๆ ในวงจร DC ให้มองตัวเก็บประจุเป็นสวิตช์ที่เปิดอยู่</li></ul></div>
-                    `
-                },
-                 'rc_circuits': {
-                    title: 'วงจร RC',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>วงจร RC ประกอบด้วยตัวต้านทานและตัวเก็บประจุ เป็นวงจรที่ศึกษาพฤติกรรมของประจุและกระแสที่เปลี่ยนแปลงตามเวลา (transient behavior) เมื่อมีการสับสวิตช์ ทั้งในกระบวนการอัดประจุ (charging) และคายประจุ (discharging) ปริมาณต่างๆ จะเปลี่ยนแปลงในลักษณะของฟังก์ชันเอ็กซ์โพเนนเชียล</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\text{ค่าคงตัวเวลา: } \\tau = RC \\\\ \\text{การอัดประจุ: } q(t) = Q_f(1-e^{-t/\\tau}), i(t) = I_0 e^{-t/\\tau} \\\\ \\text{การคายประจุ: } q(t) = Q_0 e^{-t/\\tau}, i(t) = -I_0 e^{-t/\\tau}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">ในวงจรดังรูป (R-C ต่ออนุกรม แล้วขนานกับ R-C อีกชุด) เมื่อสับสวิตช์ กราฟของประจุในตัวเก็บประจุตัวขวาสุด (\`q(t)\`) จะมีลักษณะอย่างไร</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. ตอน \`t=0\` ตัวเก็บประจุยังไม่มีประจุ ทำตัวเหมือนลัดวงจร กระแสจะไหลผ่าน R ตัวซ้ายและ R ตัวขวา</p><p>2. ตอน \`t \\to \\infty\` ตัวเก็บประจุประจุเต็ม ทำตัวเหมือนวงจรเปิด กระแสจะไหลผ่าน R ตัวซ้ายและ R ตัวกลาง</p><p>3. พฤติกรรมในช่วงกลางจะซับซ้อน แต่สังเกตได้ว่าตอนแรกกระแสไหลเข้า C ตัวขวา แต่เมื่อ C ตัวซ้ายเริ่มมีประจุและมีความต่างศักย์สูงขึ้น อาจมีบางช่วงที่กระแสไหลย้อนกลับออกจาก C ตัวขวาเพื่อไปเข้า C ตัวซ้าย</p><p>4. ทำให้กราฟของประจุ \`q(t)\` ของ C ตัวขวาจะมีลักษณะ **เพิ่มขึ้นในช่วงแรก แล้วลดลงเข้าสู่ค่าใดค่าหนึ่ง (หรือศูนย์)** ซึ่งตรงกับกราฟรูปคล้ายระฆังคว่ำ</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>วิเคราะห์พฤติกรรมของวงจรที่เวลา \`t=0\` และ \`t \\to \\infty\` จะช่วยให้เห็นภาพรวมและตัดตัวเลือกที่ไม่สมเหตุสมผลออกไปได้</li><li>\`\\tau = RC\` คือเวลาที่ใช้ในการเปลี่ยนแปลง (อัดหรือคายประจุ) ไปประมาณ 63%</li></ul></div>
-                    `
-                },
-                'magnetic_fields': {
-                    title: 'สนามแม่เหล็กจากกระแส',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>กระแสไฟฟ้าที่ไหลในลวดตัวนำจะสร้างสนามแม่เหล็กขึ้นรอบๆ ทิศทางของสนามหาได้จากกฎมือขวา ขนาดของสนามจะขึ้นอยู่กับรูปร่างของขดลวดและระยะห่างจากลวด หัวข้อที่ออกบ่อยคือสนามจากลวดตรงยาวอนันต์และสนามที่จุดศูนย์กลางของขดลวดวงกลม</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\text{ลวดตรงยาวอนันต์: } B = \\frac{\\mu_0 I}{2\\pi r} \\\\ \\text{จุดศูนย์กลางวงลวด: } B = \\frac{\\mu_0 I}{2R} \\\\ \\text{แกนของวงลวด: } B_x = \\frac{\\mu_0 I R^2}{2(x^2+R^2)^{3/2}}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 64)</h3><p class="mb-2">วงลวดรัศมี R มีกระแส I สนามแม่เหล็กที่จุด M บนแกน ห่างจากศูนย์กลางเป็นระยะ a คือ \`B_M\` จงหาสนามแม่เหล็กที่จุด N ซึ่งห่างเป็นระยะ b ในทิศตรงข้าม</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. จากสมการสนามบนแกนของวงลวด: \`B(x) = \\frac{\\mu_0 I R^2}{2(x^2+R^2)^{3/2}}\`</p><p>2. ที่จุด M, \`x=a\`: \`B_M = \\frac{\\mu_0 I R^2}{2(a^2+R^2)^{3/2}}\`</p><p>3. ที่จุด N, \`x=-b\`: \`B_N = \\frac{\\mu_0 I R^2}{2((-b)^2+R^2)^{3/2}} = \\frac{\\mu_0 I R^2}{2(b^2+R^2)^{3/2}}\`</p><p>4. หาอัตราส่วน \`\\frac{B_N}{B_M} = \\frac{(a^2+R^2)^{3/2}}{(b^2+R^2)^{3/2}} = \\left( \\frac{R^2+a^2}{R^2+b^2} \\right)^{3/2}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>ใช้กฎมือขวาเพื่อหาทิศทางของสนามแม่เหล็ก: นิ้วโป้งชี้ทิศกระแส สี่นิ้วที่เหลือกำรอบลวดคือทิศของสนาม</li><li>สำหรับขดลวดวงกลม สี่นิ้วกำตามทิศกระแส นิ้วโป้งคือทิศของสนามที่จุดศูนย์กลาง</li></ul></div>
-                    `
-                },
-                'magnetic_force': {
-                    title: 'แรงแม่เหล็กและการเหนี่ยวนำ',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>เมื่อประจุไฟฟ้าเคลื่อนที่ในสนามแม่เหล็ก หรือมีกระแสไฟฟ้าไหลในลวดที่อยู่ในสนามแม่เหล็ก จะเกิดแรงแม่เหล็กกระทำ (\`\\vec{F}=q\\vec{v}\\times\\vec{B}\` หรือ \`\\vec{F}=I\\vec{L}\\times\\vec{B}\`) นอกจากนี้ การเปลี่ยนแปลงฟลักซ์แม่เหล็กที่ผ่านขดลวดจะทำให้เกิดแรงเคลื่อนไฟฟ้าเหนี่ยวนำขึ้น (กฎของฟาราเดย์)</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`F_B = qvB\\sin\\theta \\\\ F_B = ILB\\sin\\theta \\\\ \\text{ฟาราเดย์: } \\mathcal{E} = -\\frac{d\\Phi_B}{dt}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67, 65)</h3><p class="mb-2">ลวดตัวนำสองเส้นวางขนานกัน ห่างกัน \`d\` มีกระแส \`I_1\` และ \`I_2\` ไหลในทิศทางเดียวกัน จงหาขนาดและทิศทางของแรงต่อหน่วยความยาวที่กระทำต่อกัน</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. สนามแม่เหล็กที่ \`I_2\` สร้างขึ้น ณ ตำแหน่งของ \`I_1\` คือ \`B_2 = \\frac{\\mu_0 I_2}{2\\pi d}\`</p><p>2. แรงที่กระทำต่อลวด \`I_1\` ยาว \`L\` คือ \`F_1 = I_1 L B_2\`</p><p>3. แทนค่า \`B_2\`: \`F_1 = I_1 L (\\frac{\\mu_0 I_2}{2\\pi d})\`</p><p>4. แรงต่อหน่วยความยาวคือ \`\\frac{F_1}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}\`</p><p>5. ใช้กฎมือขวาพบว่าเป็น **แรงดูด**</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>แรงแม่เหล็กมีทิศตั้งฉากกับทั้งความเร็วของประจุและสนามแม่เหล็กเสมอ</li><li>กฎของเลนซ์ (เครื่องหมายลบในกฎของฟาราเดย์) บอกว่า emf เหนี่ยวนำจะสร้างกระแสในทิศที่ต้านการเปลี่ยนแปลงฟลักซ์แม่เหล็ก</li></ul></div>
-                    `
-                }
-            }
-        },
-        'waves': {
-            title: '🌊 คลื่นและทัศนศาสตร์',
-            icon: '🌊',
-            subcategories: {
-                'doppler': {
-                    title: 'สมบัติคลื่นและดอปเพลอร์',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>คือการเปลี่ยนแปลงความถี่ของคลื่นที่ผู้สังเกตวัดได้ เมื่อแหล่งกำเนิดคลื่นและผู้สังเกตมีการเคลื่อนที่สัมพัทธ์กัน หากเคลื่อนที่เข้าหากัน ความถี่จะสูงขึ้น (เสียงแหลมขึ้น) หากเคลื่อนที่ออกจากกัน ความถี่จะต่ำลง (เสียงทุ้มลง)</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`f_o = f_s \\left( \\frac{v \\pm v_o}{v \\mp v_s} \\right)\`</div><p class="mt-2 text-sm text-gray-400">หลักการใช้เครื่องหมาย: "เข้าหากันทำให้ความถี่สูงขึ้น" (ตัวเศษต้องมาก, ตัวส่วนต้องน้อย)</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67, 65)</h3><p class="mb-2">เรือเปิดหวูดความถี่ 500 Hz ขณะแล่นเข้าหาหน้าผาด้วยความเร็ว 10 m/s คนบนเรือจะได้ยินเสียงสะท้อนจากหน้าผามีความถี่เท่าใด (อัตราเร็วเสียงในอากาศ \`v = 340\` m/s)</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. **คลื่นไปกระทบหน้าผา:** แหล่งกำเนิด (เรือ) เคลื่อนที่เข้าหาผู้สังเกต (หน้าผา) ที่หยุดนิ่ง \`f_{\\text{cliff}} = f_s ( \\frac{v}{v - v_s} ) = 500 ( \\frac{340}{340 - 10} ) \\approx 515.15\` Hz</p><p>2. **คลื่นสะท้อนกลับ:** หน้าผากลายเป็นแหล่งกำเนิดเสียงนิ่ง (\`f_s' = f_{\\text{cliff}}\`) ส่งคลื่นมายังผู้สังเกต (เรือ) ที่เคลื่อนที่เข้าหา \`f_o = f_s' ( \\frac{v + v_o}{v} ) = 515.15 ( \\frac{340 + 10}{340} ) \\approx 530.3\` Hz</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>โจทย์เสียงสะท้อนต้องคิด 2 ต่อเสมอ: ขาไป และ ขากลับ</li><li>จำหลักการ "เข้าหา f สูง, ออกห่าง f ต่ำ" จะช่วยให้เลือกเครื่องหมายในสูตรได้ถูกต้อง</li></ul></div>
-                    `
-                },
-                'geometrical_optics': {
-                    title: 'ทัศนศาสตร์ (กระจกและเลนส์)',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ศึกษาการเกิดภาพจากกระจกและเลนส์บาง โดยใช้สมการพื้นฐานเดียวกันในการคำนวณหาระยะภาพ (\`v\`), ระยะวัตถุ (\`u\`), และความยาวโฟกัส (\`f\`) สิ่งสำคัญคือการกำหนดเครื่องหมายของปริมาณต่างๆ ให้ถูกต้องตามข้อตกลง</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\frac{1}{u} + \\frac{1}{v} = \\frac{1}{f} \\\\ \\text{กำลังขยาย: } m = -\\frac{v}{u}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">วางวัตถุไว้หน้าเลนส์เว้า (\`|f|\`) ทำให้เกิดภาพที่ตำแหน่งเดียวกับวัตถุพอดี เมื่อมีกระจกเว้า (รัศมี R) วางห่างจากเลนส์เป็นระยะ D จงหาค่า R</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. การที่ภาพสุดท้ายเกิดที่ตำแหน่งเดียวกับวัตถุ หมายความว่ารังสีแสงที่ออกจากเลนส์ไปกระทบกระจก จะต้องสะท้อนกลับมาในแนวเดิมทุกประการ</p><p>2. เหตุการณ์นี้จะเกิดขึ้นได้ก็ต่อเมื่อรังสีแสงที่ไปตกกระทบกระจกเว้า **พุ่งไปในแนวตั้งฉากกับผิวของกระจก** ซึ่งหมายความว่ารังสีเหล่านั้นต้องพุ่งไปในแนวรัศมี หรือ **พุ่งไปยังจุดศูนย์กลางความโค้ง (C) ของกระจก**</p><p>3. แสงที่ผ่านเลนส์เว้าแล้วพุ่งไปยังจุด C ของกระจก หมายความว่า **จุด C คือตำแหน่งภาพที่เกิดจากเลนส์เว้า**</p><p>4. จากสมการเลนส์: \`\\frac{1}{u} + \\frac{1}{v} = \\frac{1}{-|f|}\` (เลนส์เว้า f ติดลบ)</p><p>5. ระยะภาพ \`v\` คือระยะจากเลนส์ไปยังจุด C ซึ่งเท่ากับ \`-(D-R)\` (ภาพเสมือนอยู่หลังเลนส์) (ผิด! ภาพเกิดหลังเลนส์ v เป็นบวก) -> **แก้ไข** ภาพที่เกิดจากเลนส์เว้าจะเป็นภาพเสมือนเสมอ \`v\` ต้องติดลบ \`v = -(D-R)\`</p><p>6. \`\\frac{1}{u} - \\frac{1}{D-R} = -\\frac{1}{|f|}\` นี่เป็นสมการที่ซับซ้อน **แนวคิดที่ง่ายกว่า:** แสงที่สะท้อนกลับมาทางเดิมแล้วผ่านเลนส์เว้าอีกครั้ง ต้องกลับไปที่ตำแหน่งวัตถุเดิมได้</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>**กำหนดเครื่องหมายให้แม่น:** วัตถุจริง \`u\` เป็นบวก; ภาพจริง \`v\` เป็นบวก, ภาพเสมือน \`v\` เป็นลบ; เลนส์นูน/กระจกเว้า \`f\` เป็นบวก, เลนส์เว้า/กระจกนูน \`f\` เป็นลบ</li><li>ภาพจริงเกิดจากรังสีจริงตัดกัน (เอาฉากรับได้), ภาพเสมือนเกิดจากแนวรังสีเสมือนตัดกัน</li></ul></div>
-                    `
-                },
-                'refraction_tir': {
-                    title: 'การหักเหและสะท้อนกลับหมด',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>การหักเหเกิดขึ้นเมื่อแสงเดินทางผ่านตัวกลางที่มีดรรชนีหักเห (\`n\`) ต่างกัน ทำให้ทิศทางของแสงเปลี่ยนไปตามกฎของสเนลล์ เมื่อแสงเดินทางจากตัวกลางที่ \`n\` มากไปยัง \`n\` น้อย และทำมุมตกกระทบโตกว่าค่า **มุมวิกฤต** (\`\\theta_c\`) แสงทั้งหมดจะสะท้อนกลับ ไม่มีการหักเหออกไป เรียกว่า การสะท้อนกลับหมด (Total Internal Reflection - TIR)</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`n_1 \\sin(\\theta_1) = n_2 \\sin(\\theta_2) \\\\ \\text{มุมวิกฤต: } \\sin(\\theta_c) = \\frac{n_2}{n_1} \\text{ (สำหรับ } n_1 > n_2)\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">ปริซึมมุมฉาก (\`45^{\\circ}-90^{\\circ}-45^{\\circ}\`) ใช้สำหรับเบนทิศทางแสง 90° ดังรูป จะต้องทำจากสารที่มีดรรชนีหักเห \`\\mu\` อย่างน้อยที่สุดเท่าใด</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. แสงเดินทางเข้าปริซึมโดยไม่หักเห (ตั้งฉากกับผิว)</p><p>2. แสงตกกระทบที่ผิวด้านตรงข้ามมุมฉาก โดยทำมุมตกกระทบกับเส้นปกติเท่ากับ 45°</p><p>3. การที่แสงจะสะท้อนกลับหมดเพื่อเบน 90° ได้นั้น มุมตกกระทบ (45°) จะต้องมากกว่าหรือเท่ากับมุมวิกฤต: \`45^{\\circ} \\ge \\theta_c\`</p><p>4. \`\\sin(45^{\\circ}) \\ge \\sin(\\theta_c)\`</p><p>5. จากสูตรมุมวิกฤต \`\\sin(\\theta_c) = \\frac{n_{\\text{air}}}{n_{\\text{prism}}} = \\frac{1}{\\mu}\`</p><p>6. \`\\sin(45^{\\circ}) \\ge \\frac{1}{\\mu} \\Rightarrow \\frac{1}{\\sqrt{2}} \\ge \\frac{1}{\\mu}\`</p><p>7. \`\\mu \\ge \\sqrt{2}\` ดังนั้น ค่า \`\\mu\` น้อยที่สุดคือ \`\\sqrt{2}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>การสะท้อนกลับหมดจะเกิดขึ้นได้เมื่อแสงเดินทางจากตัวกลางหนาแน่น (n มาก) ไปยังตัวกลางโปร่ง (n น้อย) เท่านั้น</li><li>มุมตกกระทบและมุมหักเหวัดเทียบกับเส้นแนวฉากเสมอ</li></ul></div>
-                    `
-                }
-            }
-        },
-        'thermo': {
-            title: '🔥 อุณหพลศาสตร์',
-            icon: '🔥',
-            subcategories: {
-                'kinetic_theory': {
-                    title: 'ทฤษฎีจลน์ของแก๊ส',
-                     content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>อธิบายสมบัติมหภาคของแก๊ส (เช่น ความดัน, อุณหภูมิ) โดยพิจารณาพฤติกรรมในระดับจุลภาคของโมเลกุลจำนวนมากที่เคลื่อนที่แบบสุ่ม โดยมีสมมติฐานว่าโมเลกุลเป็นจุด, ไม่มแรงกระทำระหว่างกันยกเว้นตอนชน, และการชนเป็นแบบยืดหยุ่นสมบูรณ์ พลังงานจลน์เฉลี่ยของโมเลกุลจะแปรผันตรงกับอุณหภูมิสัมบูรณ์</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`P = \\frac{1}{3}\\rho \\overline{v^2} \\\\ \\frac{1}{2}m\\overline{v^2} = \\frac{3}{2}k_B T \\\\ v_{\\text{rms}} = \\sqrt{\\overline{v^2}} = \\sqrt{\\frac{3k_B T}{m}} = \\sqrt{\\frac{3RT}{M}}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 64)</h3><p class="mb-2">อัตราเร็วรากที่สองของกำลังสอง (\`v_{\\text{rms}}\`) ของโมเลกุลออกซิเจน (\`O_2\`, มวลโมเลกุล 32) มีค่าเป็นกี่เท่าของโมเลกุลไนโตรเจน (\`N_2\`, มวลโมเลกุล 28) ที่อุณหภูมิเดียวกัน</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. จากสมการ \`v_{\\text{rms}} = \\sqrt{\\frac{3RT}{M}}\`</p><p>2. ที่อุณหภูมิ T เดียวกัน จะได้ว่า \`v_{\\text{rms}} \\propto \\frac{1}{\\sqrt{M}}\`</p><p>3. \`\\frac{v_{\\text{rms, O}_2}}{v_{\\text{rms, N}_2}} = \\sqrt{\\frac{M_{\\text{N}_2}}{M_{\\text{O}_2}}}\`</p><p>4. \`\\frac{v_{\\text{rms, O}_2}}{v_{\\text{rms, N}_2}} = \\sqrt{\\frac{28}{32}} = \\sqrt{\\frac{7}{8}}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>อุณหภูมิ T ในทุกสมการของแก๊สต้องเป็นหน่วยเคลวิน (K) เท่านั้น</li><li>\`m\` คือมวลของ 1 โมเลกุล, \`M\` คือมวลต่อโมล</li></ul></div>
-                    `
-                },
-                'gas_laws': {
-                    title: 'กฎของแก๊สและกระบวนการ',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>กฎของแก๊สอุดมคติ (\`PV=nRT\`) เป็นสมการของสถานะที่ใช้อธิบายพฤติกรรมของแก๊สอุดมคติ กระบวนการเปลี่ยนแปลงสถานะของแก๊สที่สำคัญได้แก่ กระบวนการความดันคงที่ (Isobaric), ปริมาตรคงที่ (Isochoric), อุณหภูมิคงที่ (Isothermal), และไม่แลกเปลี่ยนความร้อน (Adiabatic)</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`PV = nRT \\\\ \\text{Adiabatic: } PV^\\gamma = \\text{constant} \\text{, where } \\gamma = C_p/C_v\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">ในการขยายตัวของแก๊สอะตอมคู่แบบไม่แลกเปลี่ยนความร้อน (Adiabatic) แก๊สจะประพฤติตัวตามกฎ \`PV^\\gamma =\` คงที่ ค่า \`\\gamma\` เป็นเท่าใด</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. พลังงานภายในของแก๊สอะตอมคู่ (ไม่คิดการสั่น) มี 5 degrees of freedom (3 เลื่อนที่ + 2 หมุน) \`U = \\frac{5}{2}nRT\`</p><p>2. \`C_v = (\\frac{dU}{dT})_V = \\frac{5}{2}R\`</p><p>3. จากความสัมพันธ์ \`C_p = C_v + R\`, จะได้ \`C_p = \\frac{5}{2}R + R = \\frac{7}{2}R\`</p><p>4. \`\\gamma = \\frac{C_p}{C_v} = \\frac{7/2 R}{5/2 R} = \\frac{7}{5}\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>\`\\gamma\` สำหรับแก๊สอะตอมเดี่ยวคือ \`5/3\`, อะตอมคู่คือ \`7/5\`</li><li>กระบวนการ Adiabatic จะชันกว่า Isothermal ในกราฟ P-V</li></ul></div>
-                    `
-                },
-                'first_law': {
-                    title: 'กฎข้อที่หนึ่ง',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>เป็นกฎอนุรักษ์พลังงานสำหรับระบบอุณหพลศาสตร์ กล่าวคือ "การเปลี่ยนแปลงพลังงานภายใน (\`\\Delta U\`) ของระบบมีค่าเท่ากับความร้อน (\`Q\`) ที่เข้าระบบ ลบด้วยงาน (\`W\`) ที่ระบบทำต่อสิ่งแวดล้อม"</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\Delta U = Q - W\`</div><p class="mt-2 text-sm text-gray-400">\`\\Delta U\`: \`+\` เมื่อ T เพิ่ม. \`Q\`: \`+\` เมื่อความร้อนเข้า. \`W\`: \`+\` เมื่อแก๊สขยายตัว.</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">แก๊สอุดมคติได้รับความร้อน 2500 J และในขณะเดียวกันก็ขยายตัวภายใต้ความดันคงที่ \`1.5 \\times 10^5\` Pa จากปริมาตร \`0.01 \\text{ m}^3\` เป็น \`0.02 \\text{ m}^3\` พลังงานภายในของแก๊สเปลี่ยนแปลงไปเท่าใด?</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. หางานที่ระบบทำ: \`W = P\\Delta V = (1.5 \\times 10^5)(0.02 - 0.01) = 1500\` J</p><p>2. \`Q = +2500\` J (ได้รับความร้อน)</p><p>3. \`W = +1500\` J (ขยายตัว)</p><p>4. \`\\Delta U = Q - W = 2500 - 1500 = 1000\` J</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>ระวังเครื่องหมายของ \`Q\` และ \`W\` ให้ดีที่สุด</li><li>\`W\` คือพื้นที่ใต้กราฟ P-V</li></ul></div>
-                    `
-                },
-                'heat_transfer': {
-                    title: 'การถ่ายโอนความร้อน',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>ความร้อนสามารถถ่ายโอนได้ 3 รูปแบบคือ การนำความร้อน (ผ่านตัวกลางโดยตรง), การพาความร้อน (การเคลื่อนที่ของของไหล), และการแผ่รังสี (ผ่านคลื่นแม่เหล็กไฟฟ้า) ข้อสอบมักเน้นการนำความร้อนผ่านวัสดุ และการแผ่รังสีจากวัตถุดำ</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`\\text{การนำความร้อน: } \\frac{\\Delta Q}{\\Delta t} = -kA\\frac{\\Delta T}{\\Delta x} \\\\ \\text{การแผ่รังสี: } P = \\sigma \\epsilon A T^4\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 67)</h3><p class="mb-2">แหล่งกำเนิดความร้อนอุณหภูมิ \`T_1=1000\` K ถูกกั้นด้วยแผ่นกันความร้อนหนา \`l\` สภาพนำความร้อน \`k\` ผิวด้านนอกของแผ่นกันความร้อนเป็นผิวดำสนิทอยู่ที่อุณหภูมิ \`T_2\` และแผ่รังสีสู่ความว่างเปล่า จงหา \`T_2\`</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. ในสภาวะคงตัว อัตราการนำความร้อนผ่านแผ่นกันความร้อน จะต้องเท่ากับอัตราการแผ่รังสีออกจากผิวด้านนอก</p><p>2. อัตราการนำความร้อนต่อหน่วยพื้นที่ (ฟลักซ์): \`J_{\\text{cond}} = k \\frac{T_1 - T_2}{l}\`</p><p>3. อัตราการแผ่รังสีต่อหน่วยพื้นที่ (สำหรับผิวดำ \`\\epsilon=1\`): \`J_{\\text{rad}} = \\sigma T_2^4\`</p><p>4. \`J_{\\text{cond}} = J_{\\text{rad}} \\Rightarrow k \\frac{T_1 - T_2}{l} = \\sigma T_2^4\`</p><p>5. จัดรูป: \`\\frac{k}{l\\sigma} (T_1 - T_2) = T_2^4\` ซึ่งเป็นสมการที่ต้องแก้หา \`T_2\` (โจทย์มักจะให้ข้อมูลเพิ่มเติมเพื่อแก้สมการได้)</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>อุณหภูมิ T ในสูตรการแผ่รังสีต้องเป็นเคลวินเสมอ</li><li>โจทย์สภาวะคงตัว (steady state) มักจะตั้งสมการ "อัตราการไหลเข้า = อัตราการไหลออก"</li></ul></div>
-                    `
-                }
-            }
-        },
-        'modern': {
-            title: '⚛️ ฟิสิกส์ยุคใหม่',
-            icon: '⚛️',
-            subcategories: {
-                'nuclear_reactions': {
-                    title: 'ปฏิกิริยานิวเคลียร์',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>เป็นการเปลี่ยนแปลงในระดับนิวเคลียสของอะตอม ซึ่งมีการอนุรักษ์เลขมวลและเลขอะตอมเสมอ พลังงานที่เกี่ยวข้องกับปฏิกิริยาสามารถคำนวณได้จาก "มวลพร่อง" (\`\\Delta m\`) ซึ่งเป็นผลต่างของมวลรวมก่อนและหลังปฏิกิริยา ตามสมการสมมูลมวล-พลังงานของไอน์สไตน์</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`E = (\\Delta m) c^2 \\\\ \\Delta m = m_{\\text{before}} - m_{\\text{after}}\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 66)</h3><p class="mb-2">นิวเคลียส X ที่อยู่นิ่ง สลายตัวให้ นิวเคลียส Y และอนุภาคแอลฟา (\`{^4_2\\text{He}}\`) ถ้าพลังงานจลน์ของอนุภาคแอลฟาที่ปล่อยออกมาคือ \`E_\\alpha\` จงหาพลังงานจลน์ของนิวเคลียส Y (\`E_Y\`)</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. จากกฎอนุรักษ์โมเมนตัม (ตอนแรกเป็นศูนย์): \`0 = \\vec{p}_Y + \\vec{p}_\\alpha \\Rightarrow p_Y = p_\\alpha\`</p><p>2. ขนาดโมเมนตัมเท่ากัน: \`\\sqrt{2M_Y E_Y} = \\sqrt{2m_\\alpha E_\\alpha}\`</p><p>3. ยกกำลังสองทั้งสองข้าง: \`2M_Y E_Y = 2m_\\alpha E_\\alpha\`</p><p>4. จัดรูปหา \`E_Y\`: \`E_Y = \\frac{m_\\alpha}{M_Y} E_\\alpha\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>หลักอนุรักษ์โมเมนตัมสำคัญมากในการแก้โจทย์การสลายตัวของนิวเคลียส</li><li>พลังงานที่ปล่อยออกมา (\`Q\text{-value}\`) จะถูกแบ่งเป็นพลังงานจลน์ของผลิตภัณฑ์ โดยอนุภาคที่มวลน้อยกว่าจะได้พลังงานจลน์ไปมากกว่า</li></ul></div>
-                    `
-                },
-                'em_waves': {
-                    title: 'คลื่นแม่เหล็กไฟฟ้า',
-                    content: `
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สรุปเนื้อหา</h3><p>คลื่นแม่เหล็กไฟฟ้าเกิดจากการรบกวนของสนามไฟฟ้าและสนามแม่เหล็กที่ตั้งฉากกันและตั้งฉากกับทิศทางการเคลื่อนที่ของคลื่น เดินทางในสุญญากาศด้วยอัตราเร็วคงที่ (\`c\`) พลังงานของคลื่นจะถูกแบ่งเท่าๆ กันระหว่างพลังงานในสนามไฟฟ้าและพลังงานในสนามแม่เหล็ก</p></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">สมการสำคัญ</h3><div class="equation">\`c = \\frac{1}{\\sqrt{\\epsilon_0 \\mu_0}} \\\\ E = cB \\\\ \\text{ความหนาแน่นพลังงาน: } u = u_E + u_B = \\frac{1}{2}\\epsilon_0 E^2 + \\frac{1}{2\\mu_0}B^2 = \\epsilon_0 E^2\`</div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">ตัวอย่างโจทย์ (แนวข้อสอบปี 65)</h3><p class="mb-2">ในคลื่นแม่เหล็กไฟฟ้า พลังงานต่อหน่วยปริมาตรในสนามไฟฟ้า (\`u_E = \\frac{1}{2}\\epsilon_0 E^2\`) และในสนามแม่เหล็ก (\`u_B = \\frac{B^2}{2\\mu_0}\`) มีบทบาทสมมาตรกัน จงหาความสัมพันธ์ระหว่าง E กับ B</p><div class="bg-gray-900/50 p-3 rounded-md"><p>1. ตั้งสมการพลังงานสมมาตร: \`u_E = u_B\`</p><p>2. \`\\frac{1}{2}\\epsilon_0 E^2 = \\frac{1}{2\\mu_0}B^2\`</p><p>3. \`E^2 = \\frac{1}{\\epsilon_0 \\mu_0} B^2\`</p><p>4. เนื่องจาก \`c^2 = \\frac{1}{\\epsilon_0 \\mu_0}\`, จะได้ \`E^2 = c^2 B^2\`</p><p>5. \`E = cB\`</p></div></div>
-                        <div class="content-card p-4 rounded-lg"><h3 class="text-xl font-bold text-sky-400 mb-2">เทคนิค & ข้อควรระวัง</h3><ul class="list-disc list-inside space-y-1"><li>สนาม E, สนาม B และทิศการเคลื่อนที่ \`\\vec{v}\` ตั้งฉากซึ่งกันและกันเสมอ และสัมพันธ์กันตามกฎมือขวา (\`\\vec{E} \\times \\vec{B}\` มีทิศเดียวกับ \`\\vec{v}\`)</li></ul></div>
-                    `
-                }
-            }
-        }
-    };
-
-    const mainCategoriesContainer = document.getElementById('main-categories');
-    const subCategoryPage = document.getElementById('sub-category-page');
-    const subCategoryTitle = document.getElementById('sub-category-title');
-    const subCategoryGrid = document.getElementById('sub-category-grid');
-    const contentPage = document.getElementById('content-page');
-    const contentTitle = document.getElementById('content-title');
-    const contentBody = document.getElementById('content-body');
-    const navContainer = document.getElementById('nav-container');
-
-    let navStack = [];
+    <!-- APP CONTAINER -->
+    <div id="app-container" class="hidden flex-col flex-grow w-full">
     
-    function updateNav() {
-        navContainer.innerHTML = '';
-        navStack.forEach((navItem, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn px-4 py-2 rounded-lg font-orbitron text-sky-300';
-            btn.innerHTML = `&lt; ${navItem.title}`;
-            btn.onclick = () => {
-                navStack = navStack.slice(0, index + 1);
-                const target = navStack.pop(); 
-                if (target.type === 'home') showHomePage();
-                else if (target.type === 'category') showSubCategoryPage(target.key);
-            };
-            navContainer.appendChild(btn);
-        });
-    }
+    <!-- Navbar -->
+    <nav class="glass sticky top-0 z-50 px-6 py-4 border-b border-white/10 flex justify-between items-center shadow-lg">
+        <div class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan to-violet cursor-pointer" onclick="navigate('home')">
+            🚀 POSN Physics
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6">
+            <button onclick="navigate('home')" class="nav-btn hover:text-cyan transition font-medium">หน้าแรก</button>
+            <button onclick="navigate('theory')" class="nav-btn hover:text-cyan transition font-medium">เรียนทฤษฎี</button>
+            <button onclick="navigate('sim')" class="nav-btn hover:text-cyan transition font-medium">Simulation</button>
+            <button onclick="navigate('mock')" class="nav-btn hover:text-cyan transition font-medium">Mock Test</button>
+            <button onclick="navigate('formula')" class="nav-btn hover:text-cyan transition font-medium">Formula Map</button>
+            <button onclick="navigate('progress')" class="nav-btn hover:text-cyan transition font-medium">Progress</button>
+            <a href="https://drive.google.com/drive/folders/1U6dirrJ-v7TLOUVWk8_PgQUuUhvGVdcH?usp=sharing" target="_blank" class="nav-btn hover:text-cyan transition font-bold text-violet">คลังข้อสอบพร้อมเฉลย ↗</a>
+        </div>
 
-    function showPage(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        window.scrollTo(0, 0);
-        updateNav();
-    }
+        <!-- Mobile Menu Toggle -->
+        <button class="md:hidden text-cyan text-2xl" onclick="toggleMobileMenu()">☰</button>
+    </nav>
 
-    function showHomePage() {
-        navStack = [];
-        showPage('home-page');
-    }
+    <!-- Mobile Menu Container -->
+    <div id="mobile-menu" class="hidden glass border-b border-white/10 flex flex-col p-4 space-y-4 md:hidden">
+        <button onclick="navigate('home'); toggleMobileMenu()" class="text-left">หน้าแรก</button>
+        <button onclick="navigate('theory'); toggleMobileMenu()" class="text-left">เรียนทฤษฎี</button>
+        <button onclick="navigate('sim'); toggleMobileMenu()" class="text-left">Simulation</button>
+        <button onclick="navigate('mock'); toggleMobileMenu()" class="text-left">Mock Test</button>
+        <button onclick="navigate('formula'); toggleMobileMenu()" class="text-left">Formula Map</button>
+        <button onclick="navigate('progress'); toggleMobileMenu()" class="text-left">Progress</button>
+        <a href="https://drive.google.com/drive/folders/1U6dirrJ-v7TLOUVWk8_PgQUuUhvGVdcH?usp=sharing" target="_blank" class="text-left font-bold text-violet">คลังข้อสอบพร้อมเฉลย ↗</a>
+    </div>
 
-    function showSubCategoryPage(categoryKey) {
-        navStack = [{ type: 'home', title: 'HOME' }];
-        const category = db[categoryKey];
-        subCategoryTitle.innerHTML = `${category.icon} ${category.title}`;
-        subCategoryGrid.innerHTML = '';
-        for (const subKey in category.subcategories) {
-            const sub = category.subcategories[subKey];
-            const btn = document.createElement('button');
-            btn.className = 'subcategory-btn p-4 rounded-lg text-left';
-            btn.innerHTML = `<h3 class="font-orbitron text-lg font-bold text-sky-400">${sub.title}</h3>`;
-            btn.onclick = () => showContentPage(categoryKey, subKey);
-            subCategoryGrid.appendChild(btn);
-        }
-        showPage('sub-category-page');
-    }
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-12 my-0 md:my-6 lg:my-10 glass-container rounded-none md:rounded-3xl border-0 md:border md:border-white/10">
+        
+        <!-- HOME VIEW -->
+        <section id="view-home" class="view-section fade-in">
+            <div class="text-center py-16">
+                <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan to-violet">
+                    POSN Physics Camp 1 Trainer
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                    เว็บฝึกฟิสิกส์ สอวน. ค่าย 1 จากแนวข้อสอบจริง พร้อมทฤษฎี Simulation ตัวอย่างเฉลยละเอียด และระบบ Mock Test
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="navigate('theory')" class="btn-primary">เริ่มเรียน</button>
+                    <button onclick="navigate('mock')" class="btn-primary-alt">ทำ Mock Test</button>
+                    <button onclick="navigate('formula')" class="btn-outline">เปิด Formula Map</button>
+                </div>
+            </div>
 
-    function showContentPage(categoryKey, subKey) {
-        navStack = [
-            { type: 'home', title: 'HOME' },
-            { type: 'category', title: db[categoryKey].title, key: categoryKey }
-        ];
-        const sub = db[categoryKey].subcategories[subKey];
-        contentTitle.innerHTML = sub.title;
-        contentBody.innerHTML = sub.content;
-        if (window.renderMathInElement) {
-            renderMathInElement(contentBody, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false},
-                    {left: '`', right: '`', display: false}, {left: '\\[', right: '\\]', display: true},
-                    {left: '\\(', right: '\\)', display: false}
-                ]
-            });
-        }
-        showPage('content-page');
-    }
+            <h2 class="text-2xl font-bold mb-6 mt-8 border-l-4 border-cyan pl-3">เลือกหัวข้อเรียน</h2>
+            <div id="home-topics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
+            </div>
+        </section>
 
-    function init() {
-        for (const key in db) {
-            const category = db[key];
-            const btn = document.createElement('button');
-            btn.className = 'category-btn p-4 rounded-lg text-center';
-            btn.innerHTML = `<span class="text-4xl">${category.icon}</span><h2 class="font-orbitron text-lg font-bold mt-2 text-sky-400">${category.title}</h2>`;
-            btn.onclick = () => showSubCategoryPage(key);
-            mainCategoriesContainer.appendChild(btn);
-        }
-        showHomePage();
-    }
+        <!-- THEORY VIEW -->
+        <section id="view-theory" class="view-section hidden fade-in">
+            <button onclick="navigate('home')" class="mb-4 text-cyan hover:underline">← กลับไปหน้าแรก</button>
+            <div id="theory-content">
+                <!-- Injected via JS -->
+            </div>
+        </section>
 
-    document.addEventListener('DOMContentLoaded', init);
-    </script>
+        <!-- SIMULATION VIEW -->
+        <section id="view-sim" class="view-section hidden fade-in">
+            <h2 class="text-3xl font-bold mb-6 text-cyan">Interactive Simulations</h2>
+            <p class="text-gray-300 mb-8">เรียนรู้ฟิสิกส์ผ่านแบบจำลองมาตรฐานสากล (สนับสนุนโดย PhET Interactive Simulations)</p>
+            
+            <div class="space-y-12">
+                <!-- Projectile Sim -->
+                <div class="glass-card p-4 sm:p-6">
+                    <h3 class="text-xl font-bold mb-4 text-violet">1. Projectile Motion (การเคลื่อนที่แบบโพรเจกไทล์)</h3>
+                    <div class="w-full h-[500px] md:h-[700px] bg-[#050b14] rounded-xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
+                        <span class="text-gray-500 absolute">กำลังโหลดแบบจำลอง...</span>
+                        <iframe data-src="https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_all.html" src="" width="100%" height="100%" allowfullscreen class="border-0 relative z-10"></iframe>
+                    </div>
+                </div>
+
+                <!-- Capacitor Sim -->
+                <div class="glass-card p-4 sm:p-6">
+                    <h3 class="text-xl font-bold mb-4 text-violet">2. Capacitor Lab (ตัวเก็บประจุ)</h3>
+                    <div class="w-full h-[500px] md:h-[700px] bg-[#050b14] rounded-xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
+                        <span class="text-gray-500 absolute">กำลังโหลดแบบจำลอง...</span>
+                        <iframe data-src="https://phet.colorado.edu/sims/html/capacitor-lab-basics/latest/capacitor-lab-basics_all.html" src="" width="100%" height="100%" allowfullscreen class="border-0 relative z-10"></iframe>
+                    </div>
+                </div>
+                
+                <!-- Lens Sim -->
+                <div class="glass-card p-4 sm:p-6">
+                    <h3 class="text-xl font-bold mb-4 text-violet">3. Geometric Optics (เลนส์บางและแสง)</h3>
+                    <div class="w-full h-[500px] md:h-[700px] bg-[#050b14] rounded-xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
+                        <span class="text-gray-500 absolute">กำลังโหลดแบบจำลอง...</span>
+                        <iframe data-src="https://phet.colorado.edu/sims/html/geometric-optics/latest/geometric-optics_all.html" src="" width="100%" height="100%" allowfullscreen class="border-0 relative z-10"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOCK TEST VIEW -->
+        <section id="view-mock" class="view-section hidden fade-in">
+            <h2 class="text-3xl font-bold mb-6 text-cyan">Mock Test System</h2>
+            
+            <div id="mock-setup" class="glass-card p-8 text-center max-w-2xl mx-auto">
+                <h3 class="text-xl mb-6">ตั้งค่าแบบทดสอบจำลอง</h3>
+                
+                <div class="mb-4 text-left">
+                    <label class="block mb-2 font-medium text-gray-300">เลือกหัวข้อ</label>
+                    <select id="mock-topic" class="w-full p-3 rounded bg-navy border border-gray-600 text-white focus:border-cyan outline-none">
+                        <option value="all">สุ่มทุกบท (All Topics)</option>
+                        <option value="mechanics">กลศาสตร์</option>
+                        <option value="electricity">ไฟฟ้า</option>
+                        <option value="magnetism">แม่เหล็ก</option>
+                        <option value="heat">ความร้อน</option>
+                        <option value="fluid">ของไหล</option>
+                        <option value="optics">แสง</option>
+                    </select>
+                </div>
+                
+                <div class="mb-8 text-left">
+                    <label class="block mb-2 font-medium text-gray-300">จำนวนข้อ</label>
+                    <select id="mock-count" class="w-full p-3 rounded bg-navy border border-gray-600 text-white focus:border-cyan outline-none">
+                        <option value="5">5 ข้อ</option>
+                        <option value="10">10 ข้อ</option>
+                        <option value="15">15 ข้อ</option>
+                        <option value="25">25 ข้อ (ข้อสอบจริง)</option>
+                    </select>
+                </div>
+                
+                <button onclick="startMockTest()" class="btn-primary w-full text-lg py-3">เริ่มทำข้อสอบ</button>
+            </div>
+
+            <div id="mock-active" class="hidden max-w-3xl mx-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="mock-progress" class="text-cyan font-bold">ข้อ 1 / 10</span>
+                    <span id="mock-topic-badge" class="bg-violet/20 text-violet px-3 py-1 rounded-full text-sm">กลศาสตร์</span>
+                </div>
+                
+                <div class="glass-card p-6 md:p-10 mb-6">
+                    <div id="mock-question-text" class="text-lg md:text-xl mb-8 leading-relaxed">
+                        <!-- Question injected here -->
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2">คำตอบของคุณ (ตัวเลขหรือสูตร):</label>
+                        <input type="text" id="mock-answer-input" class="w-full p-4 rounded bg-space border border-gray-600 text-white focus:border-cyan outline-none text-lg" placeholder="เช่น 40 หรือ u^2/(2g)">
+                    </div>
+                    
+                    <button onclick="checkMockAnswer()" id="mock-check-btn" class="btn-primary w-full py-3">ตรวจคำตอบ</button>
+                </div>
+                
+                <div id="mock-feedback" class="hidden glass-card p-6 mb-6">
+                    <div id="mock-feedback-status" class="text-2xl font-bold mb-4"></div>
+                    <div class="text-gray-300 mb-4">
+                        <span class="font-bold">คำตอบที่ถูกต้อง:</span> <span id="mock-feedback-correct" class="text-white"></span>
+                    </div>
+                    <div class="bg-navy/80 p-4 rounded-lg border border-gray-700">
+                        <h4 class="font-bold text-cyan mb-2">วิธีทำอย่างละเอียด:</h4>
+                        <div id="mock-feedback-solution" class="leading-relaxed"></div>
+                    </div>
+                    <div class="bg-red-900/20 p-4 rounded-lg border border-red-500/30 mt-4">
+                        <h4 class="font-bold text-red-400 mb-1">จุดที่มักพลาด:</h4>
+                        <div id="mock-feedback-mistake" class="text-red-200"></div>
+                    </div>
+                    
+                    <button onclick="nextMockQuestion()" id="mock-next-btn" class="btn-primary mt-6">ข้อต่อไป →</button>
+                </div>
+            </div>
+            
+            <div id="mock-summary" class="hidden max-w-2xl mx-auto text-center glass-card p-10">
+                <h2 class="text-4xl font-bold mb-2 text-cyan">สรุปผลการทดสอบ</h2>
+                <div class="text-6xl font-bold my-6 text-violet"><span id="mock-final-score">0</span> / <span id="mock-final-total">0</span></div>
+                <p class="text-xl text-gray-300 mb-8" id="mock-final-percent">ความแม่นยำ: 0%</p>
+                <button onclick="navigate('home')" class="btn-outline">กลับหน้าแรก</button>
+                <button onclick="navigate('mock')" class="btn-primary ml-4">ทำอีกครั้ง</button>
+            </div>
+        </section>
+
+        <!-- FORMULA MAP VIEW -->
+        <section id="view-formula" class="view-section hidden fade-in">
+            <h2 class="text-3xl font-bold mb-6 text-cyan">Formula Map</h2>
+            <p class="text-gray-300 mb-8">แผนผังสูตรสำคัญที่ออกบ่อยในค่าย 1 จัดกลุ่มตามบทเรียน</p>
+            <div id="formula-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- PROGRESS VIEW -->
+        <section id="view-progress" class="view-section hidden fade-in">
+            <h2 class="text-3xl font-bold mb-6 text-cyan">ความก้าวหน้าของคุณ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 text-center">
+                    <h3 class="text-xl text-gray-400 mb-2">จำนวน Mock Test ที่ทำ</h3>
+                    <div class="text-5xl font-bold text-violet" id="prog-tests">0</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <h3 class="text-xl text-gray-400 mb-2">คะแนนล่าสุด</h3>
+                    <div class="text-5xl font-bold text-cyan" id="prog-last-score">-</div>
+                </div>
+                <div class="glass-card p-6 md:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2">ประวัติการทำข้อสอบ</h3>
+                    <div id="prog-history" class="space-y-3">
+                        <!-- Injected -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="border-t border-white/10 mt-auto py-6 text-center text-gray-400 text-sm">
+        &copy; 2026 POSN Physics Hub - เตรียมสอบค่าย 1 ฟิสิกส์ สอวน.
+    </footer>
+
+    </div> <!-- END APP CONTAINER -->
+
+    <script src="app.js"></script>
 </body>
 </html>
