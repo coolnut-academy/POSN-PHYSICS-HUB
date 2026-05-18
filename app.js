@@ -1267,8 +1267,6 @@ let state = {
 // Setup MathJax reload helper
 function rerenderMath() {
     if (window.MathJax) {
-        // Clear previous typeset info to prevent memory leaks and speed up re-rendering
-        MathJax.typesetClear();
         MathJax.typesetPromise().catch(err => console.error("MathJax error:", err));
     }
 }
